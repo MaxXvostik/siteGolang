@@ -9,7 +9,7 @@ import (
 )
 
 func StartPage(rw http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	path := filepath.Join("app", "public", "html", "startStaticPage.html")
+	path := filepath.Join("public", "html", "startStaticPage.html")
 
 	tmpl, err := template.ParseFiles(path)
 	if err != nil {

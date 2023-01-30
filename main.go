@@ -13,7 +13,7 @@ func main() {
 	r := httprouter.New()
 	routes(r)
 
-	err := http.ListenAndServe("localhost:4444", r)
+	err := http.ListenAndServe("localhost:8080", r)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -16,8 +16,8 @@ func GetUsers(rw http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		return
 	}
 
-	main := filepath.Join("app", "public", "html", "usersDynamicPage.html")
-	common := filepath.Join("app", "public", "html", "common.html")
+	main := filepath.Join("public", "html", "usersDynamicPage.html")
+	common := filepath.Join("public", "html", "common.html")
 
 	tmpl, err := template.ParseFiles(main, common)
 	if err != nil {
