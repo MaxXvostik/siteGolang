@@ -2,4 +2,8 @@ module example.com/siteGolang
 
 go 1.19
 
-require github.com/julienschmidt/httprouter v1.3.0 // indirect
+require (
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
+	github.com/jmoiron/sqlx v1.3.5 // indirect
+	github.com/julienschmidt/httprouter v1.3.0 // indirect
+)
