@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"net/http"
 	"path/filepath"
@@ -35,11 +34,10 @@ func GetUsers(rw http.ResponseWriter, r *http.Request, p httprouter.Params) {
 }
 
 func AddUser(rw http.ResponseWriter, r *http.Request, p httprouter.Params) {
+
 	name := r.FormValue("name")
 
 	surname := r.FormValue("surname")
-
-	fmt.Println(name)
 
 	if name == "" || surname == "" {
 		http.Error(rw, "Имя и фамилия не могут быть пустыми", 400)
@@ -51,6 +49,58 @@ func AddUser(rw http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		http.Error(rw, err.Error(), 400)
 	}
 	err = json.NewEncoder(rw).Encode("Пользователь успешно добавлен!")
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+}
+
+func DeleteUser(rw http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	userId := p.ByName("userId")
+
+	user, err := model.GetUserById(userId)
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+	err = user.Delete()
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+	}
+	err = json.NewEncoder(rw).Encode("Пользователь был удален")
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+}
+
+func UpdateUser(rw http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	//получаем значение из параметра userId, переданного в строке запроса
+	userId := p.ByName("userId")
+	//получаем значения из параметров name и surname, переданных в форме запроса
+	name := r.FormValue("name")
+	surname := r.FormValue("surname")
+
+	//получаем пользователя из БД по его id
+	user, err := model.GetUserById(userId)
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+
+	//заменяем старые значения на новые
+	user.Name = name
+	user.Surname = surname
+
+	//обновляем данные в таблице
+	err = user.Update()
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+
+	//возвращаем текстовое подтверждение об успешном выполнении операции
+	err = json.NewEncoder(rw).Encode("Пользователь был успешно изменен")
 	if err != nil {
 		http.Error(rw, err.Error(), 400)
 		return
